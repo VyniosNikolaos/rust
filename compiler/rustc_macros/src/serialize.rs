@@ -215,6 +215,9 @@ fn encodable_body(
             }
         }
         _ => {
+            // This code generates two separate match arms on purpose, because
+            //  LLVM can optimize the first one into direct discriminant read.
+            //  see: https://github.com/rust-lang/rust/pull/108440
             let disc = {
                 let mut variant_idx = 0usize;
                 let encode_inner = s.each_variant(|_| {
